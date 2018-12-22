@@ -13,7 +13,7 @@ import os
 import itertools
 from docx import Document
 
-# sys.path.append('/home/spi/spi-global/tools/tensorflow_object_detection_api')
+# sys.path.append('/home/tools/tensorflow_object_detection_api')
 from object_detection.core import standard_fields
 from object_detection.metrics import tf_example_parser
 from object_detection.utils import label_map_util
