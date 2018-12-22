@@ -10,6 +10,7 @@ Usage: Could be used by calling in jupyter notbooks.
 import pandas as pd
 import xml.etree.cElementTree as ET
 from tqdm import tqdm
+import os
 
 
 def convert_csv_2_labelme_xml(csv_path, xml_folder):
@@ -61,4 +62,4 @@ def convert_csv_2_labelme_xml(csv_path, xml_folder):
             ET.SubElement(pt, "x").text = str(rows['xmin'])
             ET.SubElement(pt, "y").text = str(rows['ymax'])
         tree = ET.ElementTree(annotation)
-        tree.write(xml_folder+"/"+imgs.split('.')[0]+".xml")
+        tree.write(os.path.join(xml_folder, imgs.split('.')[0]+".xml"))
