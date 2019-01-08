@@ -152,9 +152,10 @@ def generate_prec_recall_doc(confusion_matrix,
         total_predicted = np.sum(confusion_matrix[:, id])
         precision = float(confusion_matrix[id, id] / total_predicted)
         recall = float(confusion_matrix[id, id] / total_target)
+        f1 = 2*(recall * precision) / (recall + precision)
         # print('precision_{}@{}IOU: {:.2f}'.format(name, IOU_THRESHOLD, precision))
         # print('recall_{}@{}IOU: {:.2f}'.format(name, IOU_THRESHOLD, recall))
-        record.append((name, precision, recall))
+        record.append((name, round(precision, 2), round(recall, 2), round(f1, 2)))
     record = (record)
     document = Document()
     document.add_heading('Precision & Recall Label Wise ', 0)
@@ -164,19 +165,21 @@ def generate_prec_recall_doc(confusion_matrix,
     p.add_run('.')
     p.add_run('')
     p.add_run('')
-    table = document.add_table(rows=1, cols=3)
+    table = document.add_table(rows=1, cols=4)
     hdr_cells = table.rows[0].cells
     hdr_cells[0].paragraphs[0].add_run('Label').bold = True
     hdr_cells[1].paragraphs[0].add_run('precision@{}IOU'.format(IOU_THRESHOLD)).bold = True
     hdr_cells[2].paragraphs[0].add_run('recall@{}IOU'.format(IOU_THRESHOLD)).bold = True
-    for la, precision, recall in record:
+    hdr_cells[3].paragraphs[0].add_run('f1@{}IOU'.format(IOU_THRESHOLD)).bold = True
+    for la, precision, recall, f1 in record:
         row_cells = table.add_row().cells
         row_cells[0].text = str(la)
         row_cells[1].text = str(precision)
         row_cells[2].text = str(recall)
+        row_cells[3].text = str(f1)
     document.add_page_break()
     document.save(os.path.join(save_path, 'precision_recall.docx'))
-    print("Precsion & Recalldocument generated Successfully")
+    print("Precsion & Recall document generated Successfully")
 
 
 def plot_confusion_matrix(cm,
@@ -269,9 +272,9 @@ def generate_confusion_matrix(odapi_path,
     -----
     Args:
     -----
-    1.odapi_path: --str The coornidates of the  bbox, it should have the data in the following format (xmin,ymin,xmax,ymax).
-    2.label_map_path: --str
-    3.detection_tf_record_path: -- str
+    1.odapi_path: --str The object detection api source code path( This is optional)
+    2.label_map_path: --str  The path to the label map.
+    3.detection_tf_record_path: -- str The path to the detections tf record path.
     4.iou_threshold: --float Deault:0.5
     5.confidence_threshold: --float Default:0.5
     6.display_cm: --Boolean Deafault:False Displays the confusion matrix, the label wise presicion and recall.
