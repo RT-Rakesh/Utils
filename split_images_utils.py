@@ -18,9 +18,9 @@ def split_images(csv_path, image_path, save_path):
     -----
     Args:
     -----
-        1.csv_path: --str The object detection api source code path( This is optional)
-        2.image_path: --str  The path to the label map.
-        3.save_path: -- str The path to the detections tf record path.
+        1.csv_path: --str The path to the csv, it should have the data in the following format (path,xmin,ymin,xmax,ymax,label).
+        2.image_path: --str  The path to the folder with the images.
+        3.save_path: -- str The path to save the split images.
 
     ---------
     Returns:
